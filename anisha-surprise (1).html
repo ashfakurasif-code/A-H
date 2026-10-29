@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>For Anisha ❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#1a0b1f; --bg2:#3b0f33; --rose:#ff4d82; --blush:#ffc2d6; --gold:#ffd9a0; --paper:#fff6f0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Hind Siliguri','Playfair Display',system-ui,sans-serif;
+    background:radial-gradient(ellipse at 30% 20%,var(--bg2),var(--bg1) 70%);
+    color:#fff; overflow-x:hidden; min-height:100vh;
+  }
+  canvas#hearts{position:fixed;inset:0;pointer-events:none;z-index:0}
+  section{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;text-align:center}
+  .hidden{display:none !important}
+
+  /* Cover */
+  .monogram{font-family:'Playfair Display',serif;font-size:clamp(3rem,14vw,6rem);letter-spacing:.05em;
+    background:linear-gradient(90deg,var(--blush),var(--rose),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .monogram span{display:inline-block;animation:beat 1.2s infinite;color:var(--rose);-webkit-text-fill-color:var(--rose);margin:0 .1em}
+  @keyframes beat{0%,100%{transform:scale(1)}30%{transform:scale(1.3)}60%{transform:scale(1.1)}}
+  .sub{margin-top:14px;font-size:1.1rem;color:var(--blush);max-width:420px;line-height:1.6}
+  button.main{
+    margin-top:34px;padding:14px 34px;font:inherit;font-size:1.1rem;font-weight:600;color:#fff;border:none;border-radius:999px;cursor:pointer;
+    background:linear-gradient(135deg,#ff4d82,#ff8e6e);box-shadow:0 10px 30px rgba(255,77,130,.45);transition:transform .2s, box-shadow .2s}
+  button.main:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 14px 36px rgba(255,77,130,.6)}
+
+  /* Letter */
+  .letter{
+    background:var(--paper);color:#4a2332;max-width:560px;width:100%;border-radius:16px;padding:34px 28px;text-align:left;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);position:relative;animation:rise .9s ease both}
+  @keyframes rise{from{opacity:0;transform:translateY(40px) scale(.96)}to{opacity:1;transform:none}}
+  .letter h2{font-family:'Playfair Display',serif;font-style:italic;color:#c2185b;font-size:1.7rem;margin-bottom:16px}
+  .letter p{line-height:1.9;font-size:1.08rem;margin-bottom:14px;min-height:1.9em}
+  .letter .sig{text-align:right;font-family:'Playfair Display',serif;font-style:italic;font-size:1.3rem;color:#c2185b;margin-top:10px}
+  .cursor::after{content:'▍';animation:blink 1s infinite;color:#c2185b}
+  @keyframes blink{50%{opacity:0}}
+
+  /* Reasons */
+  .reasons{display:grid;gap:14px;max-width:560px;width:100%;margin-top:26px}
+  .reasons h2{font-family:'Playfair Display',serif;font-size:2rem;color:var(--blush)}
+  .card{background:rgba(255,255,255,.08);border:1px solid rgba(255,194,214,.3);backdrop-filter:blur(6px);
+    border-radius:14px;padding:16px 18px;text-align:left;line-height:1.6;opacity:0;transform:translateY(24px);transition:all .7s ease}
+  .card.show{opacity:1;transform:none}
+  .card b{color:var(--gold)}
+
+  /* Question */
+  .q{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,7vw,2.8rem);margin-bottom:8px}
+  .btns{margin-top:30px;display:flex;gap:18px;align-items:center;justify-content:center;flex-wrap:wrap;min-height:90px;position:relative}
+  #yes{font-size:1.3rem;padding:16px 44px}
+  #no{padding:10px 24px;border-radius:999px;border:1px solid var(--blush);background:transparent;color:var(--blush);font:inherit;cursor:pointer}
+  .final{animation:rise 1s ease both}
+  .final .big{font-size:5rem;animation:beat 1.1s infinite}
+  .final h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,7vw,2.6rem);margin:10px 0}
+  .final p{color:var(--blush);line-height:1.8;max-width:440px}
+  .counter{margin-top:18px;color:var(--gold);font-size:1.05rem}
+  .hint{position:fixed;bottom:12px;left:0;right:0;text-align:center;font-size:.8rem;color:rgba(255,255,255,.4);z-index:2}
+</style>
+</head>
+<body>
+<canvas id="hearts"></canvas>
+
+<!-- 1. COVER -->
+<section id="cover">
+  <div class="monogram">A<span>❤️</span>H</div>
+  <p class="sub">Anisha, jag har en liten överraskning till dig från Himu… 🎁</p>
+  <button class="main" id="openBtn">Öppna 💌</button>
+</section>
+
+<!-- 2. LETTER -->
+<section id="letterSec" class="hidden">
+  <div class="letter">
+    <h2 id="to"></h2>
+    <div id="lines"></div>
+    <div class="sig" id="sig"></div>
+  </div>
+  <button class="main hidden" id="nextBtn">Det finns mer… ✨</button>
+</section>
+
+<!-- 3. REASONS -->
+<section id="reasonSec" class="hidden">
+  <div class="reasons" id="reasons">
+    <h2>Varför jag älskar dig 💕</h2>
+  </div>
+  <button class="main hidden" id="nextBtn2" style="margin-top:26px">En sista fråga… 🥺</button>
+</section>
+
+<!-- 4. QUESTION -->
+<section id="qSec" class="hidden">
+  <div id="ask">
+    <div class="q" id="qText"></div>
+    <p class="sub" style="margin:0 auto">Välj noga 😏</p>
+    <div class="btns" id="btns">
+      <button class="main" id="yes" style="margin-top:0">Ja 💖</button>
+      <button id="no">Nej 🙈</button>
+    </div>
+  </div>
+  <div class="final hidden" id="final">
+    <div class="big">❤️</div>
+    <h2 id="finalTitle"></h2>
+    <p id="finalMsg"></p>
+    <div class="counter" id="counter"></div>
+  </div>
+</section>
+
+<div class="hint">Från Himu, bara för Anisha 🤍</div>
+
+<script>
+/* ================= EDIT HERE ================= */
+const CONFIG = {
+  to: "Kära Anisha,",
+  from: "— Din Himu ❤️",
+  letter: [
+    "Idag är ingen speciell dag, men jag ville ändå säga något till dig.",
+    "Sedan du kom in i mitt liv känns även vanliga dagar ovanliga.",
+    "Ditt leende, dina ord, att ha dig vid min sida – allt det är det jag älskar mest.",
+    "Jag är inte perfekt, men när det gäller att älska dig menar jag allvar, till hundra procent. 💞"
+  ],
+  reasons: [
+    "<b>Ditt leende</b> – det får all min trötthet att försvinna.",
+    "<b>Hur du förstår mig</b> – även när jag inte säger något.",
+    "<b>Vid din sida</b> kan jag vara precis som jag är.",
+    "<b>För att du är du</b> – det finns ingen större anledning. 🤍"
+  ],
+  question: "Anisha, vill du vara med mig för alltid?",
+  finalTitle: "Jag älskar dig också, Anisha! 🥰",
+  finalMsg: "A ❤️ H – den här historien har precis börjat. Du är min, jag är din. Alltid.",
+  /* Together since (YYYY-MM-DD). Leave "" to hide the counter. */
+  startDate: ""
+};
+/* ============================================= */
+
+const $ = id => document.getElementById(id);
+function show(id){ document.querySelectorAll('section').forEach(s=>s.classList.add('hidden')); $(id).classList.remove('hidden'); window.scrollTo(0,0); }
+
+/* floating hearts background */
+const cv=$('hearts'), cx=cv.getContext('2d'); let W,H,hearts=[];
+function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight}
+addEventListener('resize',resize); resize();
+function spawn(burst){
+  hearts.push({x:burst?burst.x:Math.random()*W,y:burst?burst.y:H+20,s:8+Math.random()*18,
+    vx:burst?(Math.random()-.5)*6:(Math.random()-.5)*.6, vy:burst?-2-Math.random()*5:-.6-Math.random()*1.2,
+    a:.8,c:['#ff4d82','#ff8e6e','#ffc2d6','#ffd9a0'][Math.floor(Math.random()*4)],life:burst?140:9999});
+}
+function heart(x,y,s,c,a){cx.save();cx.globalAlpha=a;cx.fillStyle=c;cx.translate(x,y);cx.scale(s/20,s/20);cx.beginPath();
+  cx.moveTo(0,6);cx.bezierCurveTo(-10,-4,-14,-14,-6,-16);cx.bezierCurveTo(-2,-17,0,-14,0,-12);
+  cx.bezierCurveTo(0,-14,2,-17,6,-16);cx.bezierCurveTo(14,-14,10,-4,0,6);cx.fill();cx.restore()}
+function loop(){
+  cx.clearRect(0,0,W,H);
+  if(Math.random()<.06) spawn();
+  hearts=hearts.filter(h=>h.y>-40&&h.life>0);
+  hearts.forEach(h=>{h.x+=h.vx;h.y+=h.vy;h.life--; if(h.life<40) h.a=Math.max(0,h.life/40*.8); if(h.vy>-8&&h.life<9000) h.vy+=.05; heart(h.x,h.y,h.s,h.c,h.a)});
+  requestAnimationFrame(loop);
+}
+loop();
+function burst(n){for(let i=0;i<n;i++)spawn({x:W/2,y:H/2})}
+
+/* flow */
+$('openBtn').onclick=()=>{ burst(40); show('letterSec'); typeLetter(); };
+
+async function typeLetter(){
+  $('to').textContent=CONFIG.to;
+  const box=$('lines'); box.innerHTML='';
+  for(const line of CONFIG.letter){
+    const p=document.createElement('p'); p.className='cursor'; box.appendChild(p);
+    for(const ch of line){ p.textContent+=ch; await new Promise(r=>setTimeout(r,35)); }
+    p.classList.remove('cursor'); await new Promise(r=>setTimeout(r,350));
+  }
+  $('sig').textContent=CONFIG.from;
+  $('nextBtn').classList.remove('hidden');
+}
+
+$('nextBtn').onclick=()=>{
+  show('reasonSec');
+  const wrap=$('reasons');
+  CONFIG.reasons.forEach((t,i)=>{
+    const d=document.createElement('div'); d.className='card'; d.innerHTML=t; wrap.appendChild(d);
+    setTimeout(()=>d.classList.add('show'),400+i*900);
+  });
+  setTimeout(()=>$('nextBtn2').classList.remove('hidden'),400+CONFIG.reasons.length*900);
+};
+
+$('nextBtn2').onclick=()=>{ show('qSec'); $('qText').textContent=CONFIG.question; };
+
+/* runaway "No" button */
+const no=$('no');
+function dodge(){
+  no.style.position='fixed';
+  const x=Math.random()*(innerWidth-no.offsetWidth-20)+10, y=Math.random()*(innerHeight-no.offsetHeight-20)+10;
+  no.style.left=x+'px'; no.style.top=y+'px';
+  const yes=$('yes'); const s=parseFloat(yes.dataset.s||1)+.12; yes.dataset.s=s; yes.style.transform='scale('+s+')';
+}
+no.addEventListener('mouseenter',dodge);
+no.addEventListener('touchstart',e=>{e.preventDefault();dodge()},{passive:false});
+no.addEventListener('click',dodge);
+
+$('yes').onclick=()=>{
+  $('ask').classList.add('hidden'); $('final').classList.remove('hidden');
+  $('finalTitle').textContent=CONFIG.finalTitle; $('finalMsg').textContent=CONFIG.finalMsg;
+  burst(120); setInterval(()=>burst(12),1500);
+  if(CONFIG.startDate){
+    const d=Math.floor((Date.now()-new Date(CONFIG.startDate))/864e5);
+    if(d>=0) $('counter').textContent='Vi har varit tillsammans i '+d+' dagar 💞';
+  }
+};
+</script>
+</body>
+</html>
